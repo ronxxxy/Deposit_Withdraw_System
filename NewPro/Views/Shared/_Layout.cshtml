@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AppPro</title>
+    <link rel="stylesheet" href="~/lib/Assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/Assets/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppPro.styles.css" asp-append-version="true" />
+    <link rel="icon" href="~/lib/Assets/images/icon-logo.png" type="icon/image">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        /* Make the header fixed at the top */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure the header stays above other content */
+        }
+
+        /* Add space below the header so the main content doesn't overlap */
+        .Body_container {
+            margin-top: 80px; /* Adjust this value based on your header height */
+        }
+
+        /* Make the footer fixed at the bottom */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure the footer stays above other content */
+        }
+
+        /* Add space above the footer so the main content doesn't overlap */
+        main {
+            margin-bottom: 150px; /* Adjust this value based on your footer height */
+        }
+
+        /* Adjust body overflow to ensure only the content scrolls */
+        body {
+            overflow-y: scroll;
+        }
+        .account_icon {
+            border-radius: 50%;
+        }
+
+        .logout-link {
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+
+        .logout-link:hover {
+            background-color: darkred;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        @if (ViewBag.ShowNavbar == null || ViewBag.ShowNavbar == true)
+        {
+            <nav class="navbar p-3 navbar-expand-lg bg-white top_navbar">
+                <div class="container-fluid">
+                    <!-- App name on the left -->
+                    <h2 class="navbar-brand mb-0 heading_navbar" style="align-self: center;">App Name</h2>
+
+
+                        
+
+                    <!-- Profile image and dropdown (aligned to the right) -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center justify-content-end" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="~/lib/Assets/images/account-icon.png" width="40px" class="account_icon" alt="logo">
+                                <span class="ms-1 d-none d-lg-inline"></span> <!-- Optional profile text for large screens -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown" style="border: 0px">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <a class="dropdown-item btn btn-sm logout-link" href="javascript:void(0)" onclick="confirmLogout()">Logout</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+        }
+    </header>
+
+    <div class="loader-mask">
+        <div class="loader">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="Body_container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    @if (ViewBag.ShowFooter == null || ViewBag.ShowFooter == true)
+    {
+        <!-- Footer Section Start -->
+        <footer class="footer text-white pt-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <!-- Horizontal layout for all screen sizes -->
+                        <div class="d-flex justify-content-center">
+                            <!-- First Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                        <img src="~/lib/Assets/images/home-icon.png" width="30px" class="img-fluid" alt="Icon 1">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Home</p>
+                            </div>
+
+                            <!-- Second Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a href="#" class="nav-link">
+                                        <img src="~/lib/Assets/images/website-icon.png" width="30px" class="img-fluid" alt="Icon 2">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Website</p>
+                            </div>
+
+                            <!-- Third Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Deposit" asp-action="Deposit" class="nav-link">
+                                        <img src="~/lib/Assets/images/file-icon.png" width="30px" class="img-fluid" alt="Icon 3">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Deposit</p>
+                            </div>
+
+                            <!-- Fourth Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Profile" asp-action="ProfilePage" class="nav-link">
+                                        <img src="~/lib/Assets/images/profile-icon.png" width="30px" class="img-fluid" alt="Icon 4">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Profile</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Footer Section End -->
+    }
+
+
+    <script type="text/javascript">
+    function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            window.location.href = '@Url.Action("Logout", "User")';
+        }
+    }
+</script>
+    <script src="~/lib//dist/jquery.min.js"></script>
+    <script src="~/lib/Assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/Assets/js/script.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js"></script>
+</body>
+</html>

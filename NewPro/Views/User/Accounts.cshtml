@@ -1,0 +1,67 @@
+﻿@model NewPro.Models.Account;
+@{
+    ViewData["Title"] = "Add Account";
+    Layout = "~/Views/Shared/_AppPro.cshtml";
+}
+
+<form asp-controller="User" asp-action="Accounts" method="post" enctype="multipart/form-data">
+    <!--Home Section 0 Start-->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex justify-content-center mb-2">
+                    <h2 class="heading_account">Add Account For Transaction</h2>
+                </div>
+                <h5 class="payment_method">Bank Name</h5>
+                <input type="text" asp-for="AccountBankName" required class="form-control p-3 box_input_withdraw mb-4" placeholder="EasyPaisa, JazzCash, Bank" />
+                <span asp-validation-for="AccountBankName" class="text-danger"></span>
+
+                <h5 class="payment_method">Account Number</h5>
+                <input type="text" asp-for="AccountNumber" required class="form-control p-3 box_input_withdraw mb-4" placeholder="+923153090519" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                
+                <h5 class="payment_method">Account Title</h5>
+                <input type="text" asp-for="AccountTitle" required class="form-control p-3 box_input_withdraw mb-4" placeholder="Jamal Khan" />
+                <span asp-validation-for="AccountTitle" class="text-danger"></span>
+
+                <h5 class="payment_method">Account Type</h5>
+                <select asp-for="AccountType" class="box_input_withdraw mb-4 p-2" style="width: 100%;" required>
+                    <option value="0">Select Account Type</option>
+                    <option value="1">Easy Paisa</option>
+                    <option value="2">Jazz Cash</option>
+                    <option value="3">Bank</option>
+                </select>
+                <span asp-validation-for="AccountType" class="text-danger"></span>
+                <h5 class="payment_method">Upload Image</h5>
+                <input type="file" id="imageFile" required asp-for="ImagePath" name="imageFile" class="form-control box_input_withdraw" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+    <!--Home Section 0 End-->
+    <!--Home Section 3 Start-->
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div class="d-grid gap-2 m-4">
+                    <button type="submit" class="btn p-3 transaction_button">Add Account</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+    <!--Home Section 3 End-->
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

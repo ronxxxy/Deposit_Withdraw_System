@@ -1,0 +1,148 @@
+﻿@model NewPro.BohtModel.DepositPaywallViewModel
+@{
+    ViewData["Title"] = "DepositPaywall";
+    Layout = "~/Views/Shared/_Withdraw.cshtml";
+}
+<!--Home Section Start-->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+            <h5 class="text-dark mb-4"><strong>Amount#:</strong> @ViewBag.DepositAmount /=</h5>
+
+            <h5 class="heading_title">Transfer Funds</h5>
+            <div class="row g-3 box p-3 mt-3 pb-0">
+                <h5 class="heading_title2" style="margin-bottom: -0px;">
+                    <strong>Account Type:</strong> &nbsp;&nbsp; <img src="@Url.Content("~/lib/Assets/images/" + Model.Account.ImagePath)" width="100px" alt="" />
+                </h5>
+                <!-- Left Column -->
+                <div class="col-md-12 d-flex">
+                    <div class="d-flex" style="width: 100%;">
+                        <div class="me-3 text-left" style="width: 50%;">
+                            <p id="accountNumber" class="text-start para mt-0 mb-2">Ac #: @Model.Account.AccountNumber</p>
+                            @if (Model.Account != null)
+                            {
+                                <p>Account Title: @Model.Account.AccountTitle</p>
+                            }
+                            else
+                            {
+                                <p>No account information available.</p>
+                            }
+                        </div>
+                        <div class="text-right" style="width: 50%;">
+                            <p class="text-end mt-0 mb-2"><img src="~/lib/Assets/images/pacakge-icon.png" width="17px" onclick="copyAccountNumber()" style="cursor:pointer;" /></p>
+                            <p class="text-end"><img src="" width="17px" /></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+<!--Home Section End-->
+<!--Home Section 2 Start-->
+<form asp-controller="Deposit" asp-action="DepositPaywall" method="post" enctype="multipart/form-data" id="transactionForm">
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+            <h5 class="heading_title3">Upload Payment Method</h5>
+            <div class="row g-3 box p-4 mt-3 pb-4">
+                <!-- Left Column -->
+                <div class="col-md-12 d-flex">
+                    <div class="d-flex align-items-center" style="width: 100%;">
+                            <div class="me-3 text-left" style="width: 50%;">
+                                <h5 class="heading_title2 mb-3">
+                                    <input type="file" class="font-control rounded-0" id="formFile" asp-for="Receipt" required />
+                                </h5>
+                            </div>
+                            <div class="text-right" style="width: 50%;">
+                                <input type="hidden" asp-for="Account.AccountId" />
+                                <p class="text-end"><img src="~/lib/Assets/images/image-icon.png" width="40px" /></p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+<!--Home Section 2 End-->
+<!--Home Section 3 Start-->
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+            <h5 class="heading_title3">Instructions:</h5>
+            <div class="row mt-3 p-1">
+                <p class="content_para">1. Instructions dfwdh ejfnekjfn eurfbe djnfbdj</p>
+                <p class="content_para">2. hwdbfwdhfbwdhifbwicn</p>
+                <p class="content_para">3. wjdfbwhkfbwjkf</p>
+                <p class="content_para">4. wdjfbwdjh</p>
+            </div>
+            <div class="d-grid gap-2 mt-5">
+                    <button type="submit" class="btn p-3 transaction_button">Confirm</button>
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+<!--Home Section 3 End-->
+</form>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h1 class="text-success">
+                    <i class="bi bi-check-circle-fill"></i> <!-- Bootstrap tick icon -->
+                </h1>
+                <h5 class="mt-3">Transaction Successful!</h5>
+                <p>Your transaction has been processed successfully.</p>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap CSS and JS (optional if not already included) -->
+
+<script type="text/javascript">
+    window.onload = function () {
+        var downloadUrl = '@Url.Action("DownloadReceipt", new { accountId = ViewBag.AccountId })';
+        window.location.href = downloadUrl;
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        var transactionForm = document.getElementById('transactionForm');
+        transactionForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (transactionForm.checkValidity()) {
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+            } else {
+                transactionForm.reportValidity();
+            }
+        });
+    });
+
+    function copyAccountNumber() {
+        var accountNumber = document.getElementById("accountNumber").textContent;
+        accountNumber = accountNumber.replace('Ac #: ', '');
+        var tempInput = document.createElement("input");
+        tempInput.value = accountNumber;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Account number copied: " + accountNumber);
+    }
+</script>

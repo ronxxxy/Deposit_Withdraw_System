@@ -1,0 +1,157 @@
+﻿@model NewPro.BohtModel.WithdrawViewModel;
+@{
+    ViewData["Title"] = "Withdraw";
+    Layout = "~/Views/Shared/_Withdraw.cshtml";
+}
+
+<form id="withdrawForm">
+    <!--Home Section Start-->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 box p-3 justify-content-center">
+                <h5 class="payment_method text-center">Select Payment Method</h5>
+                <div class="d-grid gap-2 mt-3">
+                    <label for="easypaisa" class="mb-2 d-flex justify-content-left btn btn-lg btn-primary w-100 p-3 payment_method_button">
+                        <span class="d-flex align-items-center">
+                            <input type="radio" name="SenderAccType" id="easypaisa" value="EasyPaisa" class="me-auto" required>
+                            <img src="~/lib/Assets/images/easypaisa-icon.png" width="130px" alt="EasyPaisa">
+                        </span>
+                    </label>
+
+                    <label for="jazzcash" class="mb-2 d-flex justify-content-left btn btn-lg btn-primary w-100 p-3 payment_method_button">
+                        <span class="d-flex align-items-center">
+                            <input type="radio" name="SenderAccType" id="jazzcash" value="JazzCash" class="me-auto" required>
+                            <img src="~/lib/Assets/images/jazzcash-icon.png" width="50px" alt="JazzCash">
+                        </span>
+                    </label>
+
+                    <label for="bank" class="mb-2 d-flex justify-content-left btn btn-lg btn-primary w-100 p-3 payment_method_button">
+                        <span class="d-flex align-items-center">
+                            <input type="radio" name="SenderAccType" id="bank" value="Bank" class="me-auto" required>
+                            <img src="~/lib/Assets/images/bank-icon.png" style="margin-top: -10px;" width="100px" alt="Bank">
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <!--Home Section End-->
+    <!--Home Section 3 Start-->
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="d-grid gap-2 mt-5">
+                    <!-- Trigger Modal -->
+                    <button type="button" class="btn p-3 transaction_button" onclick="validateAndShowModal()">Confirm</button>
+
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <!--Home Section 3 End-->
+</form>
+
+<!-- Modal -->
+<form id="modalWithdrawForm" asp-controller="Withdraw" asp-action="Withdraw" method="post">
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    Withdraw
+                </div>
+                <div class="modal-footer p-3 text-left">
+                    <div class="form-group w-100">
+                        <label asp-for="Amount">Withdraw Amount</label>
+                        <input type="number" asp-for="Amount" min="1000" class="form-control p-2 bank_name_input" id="amount">
+                        <input type="hidden" asp-for="Account.AccountId" class="form-control p-2 bank_name_input" id="AccountId">
+                        <input type="hidden" asp-for="Account.AccountTitle" class="form-control p-2 bank_name_input" id="AccountTitle">
+                    </div>
+
+                    <!--For Easypaisa and Jazzcash Field-->
+
+                    <!--For Bank Field-->
+                    <div id="bankDetails" style="display: none; width: 100% !important;">
+                        <div class="form-group w-100">
+                            <label asp-for="UserBankName">Bank Name</label>
+                            <input type="text" asp-for="UserBankName" class="form-control p-2 bank_name_input" id="bankName" placeholder="Enter Bank Name">
+                        </div>
+                    </div>
+
+                        <div class="form-group w-100">
+                            <label asp-for="UserNumber">Account Number</label>
+                            <input type="tel" asp-for="UserNumber" class="form-control p-2" id="phoneNumber" placeholder="Enter Phone Number">
+                        </div>
+                        <div class="form-group w-100">
+                            <label asp-for="UserFullname">ACC Title</label>
+                            <input type="hidden" asp-for="UserAccountType" id="UserAccountType" />
+                            <input type="text" asp-for="UserFullname" class="form-control p-2" id="accountTitle" placeholder="Enter Title">
+                        </div>
+                        <div class="form-group w-100 mt-3">
+                            <div class="d-grid gap-3 mt-4">
+                                <button type="submit" class="btn p-3 transaction_button">Withdraw</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--MODAL CLOSE-->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- JavaScript for Modal Form Handling and Validation -->
+<script type="text/javascript">
+    $('#modalWithdrawForm').on('submit', function () {
+        var selectedValue = $('input[name="SenderAccType"]:checked').val();
+        $('#UserAccountType').val(selectedValue);
+    });
+    function validateAndShowModal() {
+        var withdrawForm = document.getElementById('withdrawForm');
+
+        if (withdrawForm.checkValidity()) {
+            var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
+            confirmModal.show();
+            toggleDetails();
+        } else {
+            withdrawForm.classList.add('was-validated');
+        }
+    }
+    function toggleDetails() {
+        var isEasypaisaSelected = document.getElementById('easypaisa').checked;
+        var isJazzcashSelected = document.getElementById('jazzcash').checked;
+        var isBankSelected = document.getElementById('bank').checked;
+
+        var bankDetails = document.getElementById('bankDetails');
+        var bankNameInput = document.getElementById('bankName');
+        if (isEasypaisaSelected || isJazzcashSelected) {
+            // Hide bank details and make Bank Name not required
+            bankDetails.style.display = 'none';
+            bankNameInput.removeAttribute('required');
+            bankNameInput.value = ''; // Clear bank name value
+        } else if (isBankSelected) {
+            // Show bank details and make Bank Name required
+            bankDetails.style.display = 'block';
+            bankNameInput.setAttribute('required', 'required');
+        } else {
+            // Default behavior: hide bank details
+            bankDetails.style.display = 'none';
+            bankNameInput.removeAttribute('required');
+            bankNameInput.value = '';
+        }
+    }
+    document.getElementById('easypaisa').addEventListener('change', toggleDetails);
+    document.getElementById('jazzcash').addEventListener('change', toggleDetails);
+    document.getElementById('bank').addEventListener('change', toggleDetails);
+    window.onload = toggleDetails;
+</script>
+
+

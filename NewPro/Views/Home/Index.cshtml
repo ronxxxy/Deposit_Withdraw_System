@@ -1,0 +1,133 @@
+﻿@model NewPro.Models.User;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Home Section Start-->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+            <h5 class="heading_title">Account Details</h5>
+            <div class="row g-3 box p-4 mt-3 pb-5">
+
+                <div class="col-sm-12">
+                    <div class="d-grid gap-2">
+                        <!-- Button -->
+                        <div class="d-flex" style="width: 100%;">
+                            <a class="nav-link btn deposit_button p-3 mb-4 me-3" style="width: 50%;" asp-controller="Deposit" asp-action="Deposit">DEPOSIT</a>
+                            <a class="nav-link btn withdrawal_button p-3 mb-4" style="width: 50%;" asp-controller="Withdraw" asp-action="Withdraw">Withdrawal</a>
+                        </div>
+                        <div class="d-flex" style="width: 100%;">
+                            <div class="me-3 text-left" style="width: 50%;">
+                                <p class="text-start para">Full Name</p>
+                                <p class="text-start para">Email</p>
+                                <p class="text-start para">Whatsapp</p>
+                            </div>
+                            <div class="text-right" style="width: 50%;">
+                                <p class="text-end para">@Model.UserFullname</p>
+                                <p class="text-end para">@Model.UserEmail</p>
+                                <p class="text-end para">@Model.UserWhatsapp</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* <div class="col-sm-6">
+                     <div class="d-grid gap-2">
+                         <!-- Button -->
+                         <a class="nav-link btn withdrawal_button p-3 mb-4" asp-controller="Withdraw" asp-action="Withdraw">Withdrawal</a>
+                     </div>
+                 </div> *@
+
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+<!--Home Section End-->
+
+<!--Home Section 2 Start-->
+<div class="container mt-4" style="margin-bottom: 80px;">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+
+            @if (Model.UserActive == 1)
+            {
+                <h5 class="heading_title">Bypro Details</h5>
+
+                <div class="row g-3 box p-3 mt-3 pb-4">
+                    <h5 class="heading_title2 mt-0 mb-0">Details</h5>
+
+                    <div class="col-md-12 d-flex">
+                        <div class="d-flex" style="width: 100%;">
+                            <div class="me-3 text-left" style="width: 50%;">
+                                <p class="text-start para">Username&nbsp;&nbsp; <span id="username">@Model.UserBetproUsername</span></p>
+                                <p class="text-start para">Password&nbsp;&nbsp; <span id="password">@Model.UserBetproPassword</span></p>
+                            </div>
+                            <div class="text-right" style="width: 50%;">
+                                <p class="text-end"><img src="~/lib/Assets/images/pacakge-icon.png" width="15px" style="cursor:pointer;" onclick="copyToClipboard('username')" alt="Copy Username" /></p>
+                                <p class="text-end"><img src="~/lib/Assets/images/pacakge-icon.png" width="15px" style="cursor:pointer;" onclick="copyToClipboard('password')" alt="Copy Password" /></p>
+                            </div>
+                        </div>
+                    </div>
+                    @* <div class="col-md-4 d-flex align-items-center justify-content-end">
+                        <div>
+                            
+                        </div>
+                    </div> *@
+
+                </div>
+
+            }
+            else
+            {
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                else
+                {
+                    <p>Your account is currently inactive. Please contact support for assistance.</p>
+                }
+            }
+
+            <div class="row" style="margin-top: 35px !important;">
+                <div class="col">
+                    <div class="d-grid gap-2">
+                        <a class="nav-link" asp-controller="Transaction" asp-action="Index"><button class="btn p-3 transaction_button" type="button" style="width: 100% !important;">Transactions History</button></a>
+                    </div>
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn p-3 whatsapp_button align-middle" type="button"><img src="~/lib/Assets/images/whatsappIcon.png" width="20px" class="" alt="">&nbsp;Contact on Whatsapp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+<!--Home Section 2 End-->
+
+<script>
+    function copyToClipboard(elementId) {
+        var textToCopy = document.getElementById(elementId).innerText;
+        var tempInput = document.createElement("input");
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Copied: " + textToCopy);
+    }
+</script>
+
+

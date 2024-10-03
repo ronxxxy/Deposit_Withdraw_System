@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Http;
+@{
+    var userId = Context.Session.GetString("UserId");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AppPro</title>
+    <link rel="stylesheet" href="~/lib/Assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/Assets/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppPro.styles.css" asp-append-version="true" />
+    <link rel="icon" href="~/lib/Assets/images/icon-logo.png" type="icon/image">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        @if (ViewBag.ShowNavbar == null || ViewBag.ShowNavbar == true)
+        {
+            <nav class="navbar p-3 navbar-expand-lg bg-white top_navbar">
+                <div class="container-fluid">
+                    <h2 class="navbar-brand mb-0 heading_navbar" href="#" style="align-self: center;">App Name</h2>
+                    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            @if (userId != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-sm btn-danger rounded-0" href="javascript:void(0)" onclick="confirmLogout()">Logout</a>
+                                </li>
+                            }
+                        </ul>
+                        <form class="d-flex align-items-center" role="search">
+                            <img src="~/lib/Assets/images/account-icon.png" width="40px" class="account_icon" alt="logo" id="accountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        }
+    </header>
+    <div class="loader-mask">
+        <div class="loader">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @if (ViewBag.ShowFooter == null || ViewBag.ShowFooter == true)
+    {
+        <footer class="footer text-white pt-4" style="margin-bottom: -60px; margin-top: 150px; position:relative;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <!-- Horizontal layout for all screen sizes -->
+                        <div class="d-flex justify-content-center">
+
+                            <!-- First Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                        <img src="~/lib/Assets/images/home-icon.png" width="30px" class="img-fluid" alt="Icon 1">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Home</p>
+                            </div>
+
+                            <!-- Second Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a href="#" class="nav-link">
+                                        <img src="~/lib/Assets/images/website-icon.png" width="30px" class="img-fluid" alt="Icon 2">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Website</p>
+                            </div>
+
+                            <!-- Third Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Deposit" asp-action="Deposit" class="nav-link">
+                                        <img src="~/lib/Assets/images/file-icon.png" width="30px" class="img-fluid" alt="Icon 3">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Deposit</p>
+                            </div>
+
+                            <!-- Fourth Column -->
+                            <div class="d-flex flex-column align-items-center mx-3">
+                                <div class="d-flex align-items-center image_div">
+                                    <a asp-controller="Profile" asp-action="ProfilePage" class="nav-link">
+                                        <img src="~/lib/Assets/images/profile-icon.png" width="30px" class="img-fluid" alt="Icon 4">
+                                    </a>
+                                </div>
+                                <p class="mt-2 text-center icon_paragraph">Profile</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    }
+
+    <script src="~/lib//dist/jquery.min.js"></script>
+    <script src="~/lib/Assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/Assets/js/script.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js"></script>
+</body>
+</html>

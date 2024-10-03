@@ -1,0 +1,59 @@
+﻿@model NewPro.Models.Deposit;
+@{
+    ViewData["Title"] = "Deposit Amount";
+    Layout = "~/Views/Shared/_Withdraw.cshtml";
+}
+
+<form>
+    <!--Home Section 0 Start-->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4 col-md 6">
+            </div>
+            <div class="col-md-4 col-md 6">
+                <h4 class="heading_title_amount mb-2">Enter Amount</h4>
+                <p class="text-start para mt-2 mb-2">Manimum Amount: 1000/=</p>
+                <input type="number" id="amountInput" asp-for="Amount" min="1000" class="form-control p-3 box_input" placeholder="0.00" required />
+                <span id="amountError" style="color:red; display:none;">Amount must be greater than 1000.</span>
+            </div>
+            <div class="col-md-4 col-md 6">
+            </div>
+        </div>
+    </div>
+    <!--Home Section 0 End-->
+    <!--Home Section 3 Start-->
+    <div class="container mt-4 mb-4" style="margin-top: 300px !important;">
+        <div class="row">
+            <div class="col-md-4 col-md 6">
+            </div>
+            <div class="col-md-4 col-md 6">
+                <div class="d-grid gap-2 mt-5">
+                    <button type="button" class="btn p-3 transaction_button" onclick="validateAmount()">Next</button>
+                </div>
+            </div>
+            <div class="col-md-4 col-md 6">
+            </div>
+        </div>
+    </div>
+    <!--Home Section 3 End-->
+</form>
+
+
+<script>
+    function validateAmount() {
+        const amountInput = document.getElementById('amountInput').value;
+        const amountError = document.getElementById('amountError');
+        const minimumAmount = 1000;
+        const amount = Number(amountInput);
+        if (isNaN(amount) || amount < minimumAmount) {
+            amountError.style.display = 'block';
+            return false;
+        } else {
+            amountError.style.display = 'none';
+
+            const url = '@Url.Action("AccountList", "Home")?amount=' + encodeURIComponent(amount);
+            window.location.href = url;
+        }
+    }
+</script>
+

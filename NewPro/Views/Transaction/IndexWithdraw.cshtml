@@ -1,0 +1,93 @@
+﻿@model IEnumerable<NewPro.Models.Withdraw>
+@{
+    ViewData["Title"] = "Withdraws";
+    Layout = "~/Views/Shared/_Withdraw.cshtml";
+}
+
+<div class="container mt-4" style="margin-bottom: 400px;">
+    <div class="row">
+        <div class="col-md-4 col-md 6">
+        </div>
+        <div class="col-md-4 col-md 6">
+            @if (TempData["WithdrawError"] != null)
+            {
+                <div class="alert alert-warning">
+                    @TempData["WithdrawError"]
+                </div>
+            }
+            @* <p>@ViewBag.UserId</p> *@
+            @if (Model != null && Model.Any())
+            {
+                <h3 style="color: #0767A3; font-family: Poppins, sans-serif; font-weight: 700;" class="mb-2">Withdraw Transactions</h3>
+                <input type="text" id="searchInput" class="form-control rounded-0 mt-2" placeholder="Sender Name" onkeyup="searchTransaction()" />
+                @foreach (var withdraw in Model)
+                {
+                    <div class="row g-3 box p-4 mt-3 pb-2">
+                        <div class="col-md-12 d-flex align-items-center mb-1">
+                            <div>
+                                <h6 style="color: black; font-family: Poppins, sans-serif; font-weight: 700;" class="mb-3">Withdraw Slip</h6>
+                                <h6 class="text-start mb-3 heading_six">
+                                    @if (withdraw.Status == 1)
+                                    {
+                                        <p class="text-success">Approved</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-danger">Pending</p>
+                                    }
+                                </h6>
+                                <p style="color: black; font-family: Poppins, sans-serif; font-weight: 600; font-size:14px;" class="mb-2">Details</p>
+                                <p class="text-start para_transaction mb-1">Acc #: @withdraw.SenderAccNum</p>
+                                <p class="text-start sender-name para_transaction mb-1">Acc Title: @withdraw.SenderAccName</p>
+                                <p class="text-start para_transaction mb-1">Withdraw Type: @withdraw.SenderAccType</p>
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <div class="col-md-12 d-flex align-items-center justify-content-end">
+                                <div>
+                                    <p style="color: #0767A3; font-family: Poppins, sans-serif; font-weight: 600; font-size:12px;" class="text-end para_transaction mb-2">Amount: @withdraw.Amount</p>
+                                    <p class="text-end para_transaction">@withdraw.DateAndTime.ToString("g")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h3 style="color: #0767A3; font-family: Poppins, sans-serif; font-weight: 700;">No transactions found.</h3>
+            }
+            <div class="d-grid gap-2 mt-3">
+                <a class="nav-link" asp-controller="Transaction" asp-action="Index"><button class="btn p-3 transaction_button" type="button" style="width: 100% !important;">Deposit Transaction</button></a>
+            </div>
+        </div>
+        <div class="col-md-4 col-md 6">
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchTransaction() {
+        var input, filter, transactions, transaction, nameElement, name, i;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();  // Convert the input to uppercase for case-insensitive search
+        transactions = document.querySelectorAll(".box");  // Get all transaction boxes
+
+        for (i = 0; i < transactions.length; i++) {
+            transaction = transactions[i];
+            // Select the specific element with the class 'sender-name' for SenderAccName
+            nameElement = transaction.querySelector(".sender-name");
+
+            if (nameElement) {
+                name = nameElement.textContent || nameElement.innerText;
+                // Check if the SenderAccName contains the search term
+                if (name.toUpperCase().indexOf(filter) > -1) {
+                    transaction.style.display = "";  // Show the transaction if it matches the search
+                } else {
+                    transaction.style.display = "none";  // Hide the transaction if it doesn't match
+                }
+            }
+        }
+    }
+</script>
+
